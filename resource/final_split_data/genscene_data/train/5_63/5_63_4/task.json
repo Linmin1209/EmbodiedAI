@@ -1,0 +1,5 @@
+{
+    "instruction": "Find kitchen_light_fixture-1 and navigate to kitchen_light_fixture-2",
+    "goal": "kitchen_light_fixture-1, kitchen_light_fixture-2",
+    "scene_path": "/data1/lfwj/gen_scene/final_all_usd/5/63/63.usd"
+}

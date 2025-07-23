@@ -51,6 +51,7 @@ class SPL(BaseMetric):
         self.first_success = False
         self.second_success = False
         self.spl = None
+        self.first_pl = None
 
     
     @property  
@@ -64,8 +65,9 @@ class SPL(BaseMetric):
             if task.stage[i] == 1 and task._success[i][0] and self.first_success!=True:
                 self.spl[i][task.stage[i]-1] = self.calculate_metrics(task.robots[i].get_path_length(), task.optimal_length[i][task.stage[i]-1], task._success[i][0])
                 self.first_success = True
+                self.first_pl = task.robots[i].get_path_length()
             if task.stage[i] == 2 and task._success[i][1] and self.second_success!=True:
-                self.spl[i][task.stage[i]-1] = self.calculate_metrics(task.robots[i].get_path_length(), task.optimal_length[i][task.stage[i]-1], task._success[i][1])
+                self.spl[i][task.stage[i]-1] = self.calculate_metrics(task.robots[i].get_path_length()-self.first_pl, task.optimal_length[i][task.stage[i]-1], task._success[i][1])
                 self.second_success = True
         return self.spl
     

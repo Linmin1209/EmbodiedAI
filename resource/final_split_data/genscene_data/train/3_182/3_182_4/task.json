@@ -1,0 +1,5 @@
+{
+    "instruction": "Find wardrobe-0 and locate bookcase-0 in the area",
+    "goal": "wardrobe-0, bookcase-0",
+    "scene_path": "/data1/lfwj/gen_scene/final_all_usd/3/182/182.usd"
+}

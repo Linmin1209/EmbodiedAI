@@ -1,0 +1,5 @@
+{
+    "instruction": "Seek out refrigerator-0 and approach oven-0 nearby",
+    "goal": "refrigerator-0, oven-0",
+    "scene_path": "/data1/lfwj/gen_scene/final_all_usd/5/3/3.usd"
+}

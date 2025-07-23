@@ -1,0 +1,5 @@
+{
+    "instruction": "Find bar_stools-0 and get close to bar_stools-1",
+    "goal": "bar_stools-0, bar_stools-1",
+    "scene_path": "/data1/lfwj/gen_scene/final_all_usd/3/112/112.usd"
+}

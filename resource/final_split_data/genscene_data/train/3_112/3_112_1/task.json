@@ -1,0 +1,5 @@
+{
+    "instruction": "Navigate to dishwasher-0 and approach kitchen_island-0 nearby",
+    "goal": "dishwasher-0, kitchen_island-0",
+    "scene_path": "/data1/lfwj/gen_scene/final_all_usd/3/112/112.usd"
+}

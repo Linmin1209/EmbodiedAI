@@ -1,0 +1,5 @@
+{
+    "instruction": "Find bookshelf-1 and get near bookshelf-2",
+    "goal": "bookshelf-1, bookshelf-2",
+    "scene_path": "/data1/lfwj/gen_scene/final_all_usd/2/14/14.usd"
+}

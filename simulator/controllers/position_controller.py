@@ -78,7 +78,8 @@ class PositionController(BaseController):
         if command[0]=="w" or command[0]==0:
             robot.plan_length.append(command[1])
         robot.Xform.set_world_pose(position = target_pos, orientation = euler)
-        world.step(render=True)
+        # world.step(render=True)
+        world.step(render=False)
         if grasped_object is not None:
             for k,v in grasped_object:
                 target_pos, euler = self.get_action(command, v)

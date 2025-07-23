@@ -1,0 +1,5 @@
+{
+    "instruction": "Approach dresser-0 and find nightstand-0 in the vicinity",
+    "goal": "dresser-0, nightstand-0",
+    "scene_path": "/data1/lfwj/gen_scene/final_all_usd/2/107/107.usd"
+}

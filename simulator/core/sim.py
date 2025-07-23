@@ -82,7 +82,7 @@ class Simulator():
         self._scene = self._world.scene
         self._stage = self._world.stage
         self._resource_path = "./resource"
-        self._warm_up()
+        # self._warm_up()
         
 
     def _warm_up(self, steps=20, render=True):
@@ -116,6 +116,7 @@ class Simulator():
             )
         robot.init()
         self._world.scene.add(robot.isaac_robot)
+        self.render()
         # self._warm_up()
         pass
 
@@ -162,6 +163,7 @@ class Simulator():
             scene_aabb = scene_prim.get_aabb()
             center,width,height = compute_enclosing_square(scene_aabb)
             add_boundary_walls(width=width, height=height, wall_height=5, wall_thickness=0.5,center=center, env_id=scene_id)
+        self.render()
         # self._warm_up()
 
     def extract_target_ids(self, json_path):
@@ -273,10 +275,13 @@ class Simulator():
 
     def step(self, render:bool=True) -> dict[str, Any]:
         return self._world.step(render=render)
+    
+    def render(self):
+        return self._world.render()
 
     def physics_step(self, robot: BaseRobot, action: np.ndarray):
         robot.apply_action(action, self._world)
-        self._world.step(render=True)
+        self._world.step(render=False)
         pass
     
     def reinit_world(self):

@@ -1,0 +1,5 @@
+{
+    "instruction": "Move towards bench-0 and make your way to kitchen_island-0",
+    "goal": "bench-0, kitchen_island-0",
+    "scene_path": "/data1/lfwj/gen_scene/final_all_usd/5/3/3.usd"
+}

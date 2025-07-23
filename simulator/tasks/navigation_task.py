@@ -39,8 +39,6 @@ class NavigateTask(BaseTask):
         # self.robot_path_length = [0 for _ in range(len(self.robots))]
         
 
-        
-
     def get_task_type(self):
         '''
         Get the type of the task, e.g. "navigate", "manipulate"
@@ -131,8 +129,9 @@ class NavigateTask(BaseTask):
                 goal_point_0 = self.goal_points[0][0]
                 goal_point_1 = self.goal_points[1][0]
             self.optimal_length[i][0], _, _ = self.get_distance_from_start(goal_pos=goal_point_0 , robot_id=i)
-            self.optimal_length[i][1], _, _ = self.get_distance_from_start(goal_pos=goal_point_1 , robot_id=i)
-    
+            self.optimal_length[i][1], _, _ = self.get_distance_from_start(start_pos = goal_point_0, goal_pos=goal_point_1 , robot_id=i)
+        self.goal_object_pos = [objects[i].get_world_pose()[0][0:2] for i in range(len(objects))]
+
     def step(self):
         """
         return obs reward done info
@@ -158,12 +157,6 @@ class NavigateTask(BaseTask):
             if self._is_at_goal(robot_position, robot_id):
                 self.reached_goal = True
                 self._success[robot_id][self.stage[robot_id]] = True
-                # Calculate optimal_length when stage is completed
-                if isinstance(self.goal_points[0][1], list):
-                    goal_point = self.goal_points[robot_id][self.stage[robot_id]][0]
-                else:
-                    goal_point = self.goal_points[self.stage[robot_id]][0]
-                self.optimal_length[robot_id][self.stage[robot_id]], _, _ = self.get_distance_from_start(goal_pos=goal_point, robot_id=robot_id)
                 self.stage[robot_id] += 1
         else:
             self.reached_goal = False
@@ -177,21 +170,21 @@ class NavigateTask(BaseTask):
             return all([item for sublist in self._success for item in sublist])
 
 
-    def _is_at_goal(self, position, id, goal_threshold=0.5):
+    def _is_at_goal(self, position, id, goal_threshold=1.5):
         """
         检查机器人是否到达目标点
         """
-        if isinstance(self.goal_points[0][1], list):
-            goal_point = self.goal_points[id][self.stage[id]][0]
+        if isinstance(self.goal_object_pos[0], list):
+            goal_point = self.goal_object_pos[id][self.stage[id]]
         else:
-            goal_point = self.goal_points[self.stage[id]][0]
+            goal_point = self.goal_object_pos[self.stage[id]]
         goal_point = [goal_point[0], goal_point[1]]
         distance = ((position[0] - goal_point[0]) ** 2 +
                     (position[1] - goal_point[1]) ** 2) ** 0.5
-        print(f"distance: {distance}")
+        # print(f"distance: {distance}")
         ### TODO: 检测是否在墙内
-        block = check_reachability_with_expansion(self.hm, self.navigator,  goal_point, position)
-        return distance < self.goal_threshold and not block
+        nav_succ = check_reachability_with_expansion(self.hm, self.navigator,  goal_point, position)
+        return distance < self.goal_threshold and nav_succ
 
     def individual_reset(self):
         """
@@ -247,7 +240,7 @@ class NavigateTask(BaseTask):
         self.navigator.planner.compute_cost_map()
         
 
-    def get_distance_from_start(self, goal_pos, robot_id =0):
+    def get_distance_from_start(self, start_pos = None, goal_pos = None, robot_id =0):
         '''
         根据机器人位置和物品位置计算规划路径距离
         robot_pos和goal_pos都是isaacsim的世界坐标
@@ -264,7 +257,10 @@ class NavigateTask(BaseTask):
         #     # navigator.planner.compute_cost_map()
         
         # show_map_(navigator.planner.cost_map)
-        robot_pos = [self.start_points[robot_id][0], self.start_points[robot_id][1]]
+        if start_pos == None:
+            robot_pos = [self.start_points[robot_id][0], self.start_points[robot_id][1]]
+        else:
+            robot_pos = start_pos
         
         path, map_nav_path = self.navigator.navigate(goal_pos, robot_pos)
         # map_goal_pos = self.navigator.planner.real2map(goal_pos)

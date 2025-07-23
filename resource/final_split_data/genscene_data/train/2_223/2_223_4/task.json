@@ -1,0 +1,5 @@
+{
+    "instruction": "Move to floor_lamp-1 and locate kitchen_counter-0",
+    "goal": "floor_lamp-1, kitchen_counter-0",
+    "scene_path": "/data1/lfwj/gen_scene/final_all_usd/2/223/223.usd"
+}

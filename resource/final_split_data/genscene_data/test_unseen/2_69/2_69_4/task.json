@@ -1,0 +1,5 @@
+{
+    "instruction": "Move to side_table-0 and find side_table-1",
+    "goal": "side_table-0, side_table-1",
+    "scene_path": "/data1/lfwj/gen_scene/final_all_usd/2/69/69.usd"
+}

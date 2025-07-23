@@ -1,0 +1,5 @@
+{
+    "instruction": "Find accent_chair-0 and walk to sectional_sofa-0",
+    "goal": "accent_chair-0, sectional_sofa-0",
+    "scene_path": "/data1/lfwj/gen_scene/final_all_usd/5/133/133.usd"
+}

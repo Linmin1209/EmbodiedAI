@@ -1,0 +1,5 @@
+{
+    "instruction": "Locate bedside_table-1 and move towards dresser-0",
+    "goal": "bedside_table-1, dresser-0",
+    "scene_path": "/data1/lfwj/gen_scene/final_all_usd/5/113/113.usd"
+}

@@ -1,0 +1,5 @@
+{
+    "instruction": "Approach laundry_basket-0 and move close to sofa-0",
+    "goal": "laundry_basket-0, sofa-0",
+    "scene_path": "/data1/lfwj/gen_scene/final_all_usd/2/23/23.usd"
+}

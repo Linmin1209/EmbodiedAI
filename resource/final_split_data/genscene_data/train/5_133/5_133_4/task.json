@@ -1,0 +1,5 @@
+{
+    "instruction": "Move close to kitchen_island-0 and approach oven-0",
+    "goal": "kitchen_island-0, oven-0",
+    "scene_path": "/data1/lfwj/gen_scene/final_all_usd/5/133/133.usd"
+}

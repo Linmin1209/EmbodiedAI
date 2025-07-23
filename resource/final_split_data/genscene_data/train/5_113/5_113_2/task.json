@@ -1,0 +1,5 @@
+{
+    "instruction": "Get close to accent_chair-0 and navigate toward king_bed-0",
+    "goal": "accent_chair-0, king_bed-0",
+    "scene_path": "/data1/lfwj/gen_scene/final_all_usd/5/113/113.usd"
+}

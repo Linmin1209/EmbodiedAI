@@ -1,0 +1,5 @@
+{
+    "instruction": "Locate sectional_sofa-0 and move toward media_unit-0",
+    "goal": "sectional_sofa-0, media_unit-0",
+    "scene_path": "/data1/lfwj/gen_scene/final_all_usd/4/150/150.usd"
+}

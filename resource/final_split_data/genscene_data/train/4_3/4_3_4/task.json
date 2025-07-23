@@ -1,0 +1,5 @@
+{
+    "instruction": "Approach coffee_table-0 and locate floor_lamp-0 close by",
+    "goal": "coffee_table-0, floor_lamp-0",
+    "scene_path": "/data1/lfwj/gen_scene/final_all_usd/4/3/3.usd"
+}

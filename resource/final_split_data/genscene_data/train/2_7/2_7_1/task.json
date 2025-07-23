@@ -1,0 +1,5 @@
+{
+    "instruction": "Find bookshelf-0 and approach console_table-0",
+    "goal": "bookshelf-0, console_table-0",
+    "scene_path": "/data1/lfwj/gen_scene/final_all_usd/2/7/7.usd"
+}

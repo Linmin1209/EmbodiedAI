@@ -1,0 +1,5 @@
+{
+    "instruction": "Locate accent_chair-0 and head to accent_chair-1",
+    "goal": "accent_chair-0, accent_chair-1",
+    "scene_path": "/data1/lfwj/gen_scene/final_all_usd/4/110/110.usd"
+}

@@ -1,0 +1,5 @@
+{
+    "instruction": "Find coffee_table-0 and navigate to accent_chair-1",
+    "goal": "coffee_table-0, accent_chair-1",
+    "scene_path": "/data1/lfwj/gen_scene/final_all_usd/4/150/150.usd"
+}

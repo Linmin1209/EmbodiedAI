@@ -1,0 +1,5 @@
+{
+    "instruction": "Find kitchen_pantry-0 and navigate to bed-0",
+    "goal": "kitchen_pantry-0, bed-0",
+    "scene_path": "/data1/lfwj/gen_scene/final_all_usd/5/150/150.usd"
+}

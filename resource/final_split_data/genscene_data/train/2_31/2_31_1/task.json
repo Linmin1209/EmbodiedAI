@@ -1,0 +1,5 @@
+{
+    "instruction": "Navigate to storage_cabinet-0 and locate toilet-0 in the area",
+    "goal": "storage_cabinet-0, toilet-0",
+    "scene_path": "/data1/lfwj/gen_scene/final_all_usd/2/31/31.usd"
+}

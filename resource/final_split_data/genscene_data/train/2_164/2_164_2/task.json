@@ -1,0 +1,5 @@
+{
+    "instruction": "Move close to dressing_table-0 and seek out armchair-0",
+    "goal": "dressing_table-0, armchair-0",
+    "scene_path": "/data1/lfwj/gen_scene/final_all_usd/2/164/164.usd"
+}

@@ -1,0 +1,5 @@
+{
+    "instruction": "Move towards bedside_table-0 and get close to bedside_table-1",
+    "goal": "bedside_table-0, bedside_table-1",
+    "scene_path": "/data1/lfwj/gen_scene/final_all_usd/5/78/78.usd"
+}

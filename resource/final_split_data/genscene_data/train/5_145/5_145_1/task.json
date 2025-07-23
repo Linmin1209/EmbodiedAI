@@ -1,0 +1,5 @@
+{
+    "instruction": "Move towards coffee_table-0 and locate console_table-0 nearby",
+    "goal": "coffee_table-0, console_table-0",
+    "scene_path": "/data1/lfwj/gen_scene/final_all_usd/5/145/145.usd"
+}

@@ -1,0 +1,5 @@
+{
+    "instruction": "Move towards island-0 and locate pantry-0",
+    "goal": "island-0, pantry-0",
+    "scene_path": "/data1/lfwj/gen_scene/final_all_usd/5/42/42.usd"
+}

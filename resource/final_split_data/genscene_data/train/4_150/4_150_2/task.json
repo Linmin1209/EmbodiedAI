@@ -1,0 +1,5 @@
+{
+    "instruction": "Approach bookshelf-0 and then make your way to bookshelf-1",
+    "goal": "bookshelf-0, bookshelf-1",
+    "scene_path": "/data1/lfwj/gen_scene/final_all_usd/4/150/150.usd"
+}

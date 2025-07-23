@@ -1,0 +1,5 @@
+{
+    "instruction": "Get close to vanity_sink-0 and proceed toward storage_cabinet-0",
+    "goal": "vanity_sink-0, storage_cabinet-0",
+    "scene_path": "/data1/lfwj/gen_scene/final_all_usd/2/14/14.usd"
+}

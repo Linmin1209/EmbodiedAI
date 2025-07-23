@@ -1,0 +1,5 @@
+{
+    "instruction": "Move close to dresser-0 and head to sofa-0",
+    "goal": "dresser-0, sofa-0",
+    "scene_path": "/data1/lfwj/gen_scene/final_all_usd/5/1/1.usd"
+}

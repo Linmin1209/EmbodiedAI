@@ -1,0 +1,5 @@
+{
+    "instruction": "Locate armchair-1 and proceed to bed-0",
+    "goal": "armchair-1, bed-0",
+    "scene_path": "/data1/lfwj/gen_scene/final_all_usd/4/100/100.usd"
+}

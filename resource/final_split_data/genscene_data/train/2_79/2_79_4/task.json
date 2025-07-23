@@ -1,0 +1,5 @@
+{
+    "instruction": "Find vanity_unit-0 and get close to toilet-0",
+    "goal": "vanity_unit-0, toilet-0",
+    "scene_path": "/data1/lfwj/gen_scene/final_all_usd/2/79/79.usd"
+}

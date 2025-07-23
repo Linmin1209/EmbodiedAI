@@ -26,6 +26,17 @@ def check_reachability_with_expansion(hm, navigator , obj_world_pos, robot_world
     # Step 1：确保物品在黑色区域，机器人在白色区域
     if hm_map[x0][y0] != 1:
         print("物品不在黑色区域 → 无效地图")
+        # 可视化物体在地图上的位置并保存图片
+        plt.figure(figsize=(6, 6))
+        # plt.imshow(hm_map, cmap='gray', origin='upper')
+        plt.pcolormesh(np.arange(hm_map.shape[1]+1)-0.5, np.arange(hm_map.shape[0]+1)-0.5, hm_map, cmap='gray', shading='auto')
+        plt.scatter([y0], [x0], c='green', marker='o', s=80, label='Object')
+        plt.text(y0 + 0.3, x0, 'O', color='green', fontsize=12)
+        plt.title(f'Object not in black area at ({x0},{y0})')
+        plt.axis('off')
+        plt.legend()
+        plt.savefig(f'object_not_in_black_area_{x0}_{y0}.png')
+        plt.close()
         return False
     if hm_map[xR][yR] != 0:
         print("机器人不在白色区域 → 导航失败")
@@ -76,10 +87,10 @@ def check_reachability_with_expansion(hm, navigator , obj_world_pos, robot_world
                     visited[nx][ny] = True
                     expand_q.append((nx, ny, step+1))
 
-    if robot_found:
-        print("机器人在局部膨胀区域内 → 导航成功")
-    else:
-        print("机器人不在局部膨胀区域内 → 导航失败")
+    # if robot_found:
+    #     print("机器人在局部膨胀区域内 → 导航成功")
+    # else:
+    #     print("机器人不在局部膨胀区域内 → 导航失败")
 
     # visualize_expansion(hm_map, black_region, visited, obj_map, rob_map)
     return robot_found

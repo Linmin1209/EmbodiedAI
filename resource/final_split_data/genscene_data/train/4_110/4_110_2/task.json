@@ -1,0 +1,5 @@
+{
+    "instruction": "Get close to media_console-0 and navigate to area_rug-0",
+    "goal": "media_console-0, area_rug-0",
+    "scene_path": "/data1/lfwj/gen_scene/final_all_usd/4/110/110.usd"
+}

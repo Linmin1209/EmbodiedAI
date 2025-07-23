@@ -1,0 +1,5 @@
+{
+    "instruction": "Seek out nightstand-0 and go to nightstand-1",
+    "goal": "nightstand-0, nightstand-1",
+    "scene_path": "/data1/lfwj/gen_scene/final_all_usd/3/13/13.usd"
+}

@@ -1,0 +1,5 @@
+{
+    "instruction": "Seek out tv_stand-0 and locate side_table-0",
+    "goal": "tv_stand-0, side_table-0",
+    "scene_path": "/data1/lfwj/gen_scene/final_all_usd/4/89/89.usd"
+}

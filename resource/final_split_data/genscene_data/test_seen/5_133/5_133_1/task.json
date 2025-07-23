@@ -1,0 +1,5 @@
+{
+    "instruction": "Approach tv_stand-0 and move near bookcase-0",
+    "goal": "tv_stand-0, bookcase-0",
+    "scene_path": "/data1/lfwj/gen_scene/final_all_usd/5/133/133.usd"
+}

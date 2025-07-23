@@ -1,0 +1,5 @@
+{
+    "instruction": "Get near sofa-1 and find tv_stand-0",
+    "goal": "sofa-1, tv_stand-0",
+    "scene_path": "/data1/lfwj/gen_scene/final_all_usd/4/6/6.usd"
+}

@@ -1,13 +1,13 @@
 import os
 from typing import List, Optional, Union, Tuple
 from pydantic import BaseModel
-from simulator.utils.log_utils import create_module_log
+# from simulator.utils.log_utils import create_module_log
 import yaml
 from copy import deepcopy
 import numpy as np
 from pathlib import Path
 from simulator.utils.config_utils import merge_config
-log = create_module_log(name=__name__)
+# log = create_module_log(name=__name__)
 
 
 #TODO add more configs and complete some configs
@@ -118,7 +118,7 @@ class TaskConfig(BaseConfig):
     start_points: Optional[List] = []
     goal_points: Optional[List] = []
     max_steps: Optional[int] = 1000
-    goal_threshold: Optional[float] = 0.5 # m
+    goal_threshold: Optional[float] = 1.8 # m
     task_path: Optional[str] = "" # 任务的json路径，可以拿来获取物品ID
     map_path: Optional[str] = "" # 地图文件路径
     task_instruction: Optional[str] = ""

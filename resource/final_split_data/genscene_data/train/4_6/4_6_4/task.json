@@ -1,0 +1,5 @@
+{
+    "instruction": "Navigate to plant_stand-0 and approach plant_stand-1",
+    "goal": "plant_stand-0, plant_stand-1",
+    "scene_path": "/data1/lfwj/gen_scene/final_all_usd/4/6/6.usd"
+}

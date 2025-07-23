@@ -1,0 +1,5 @@
+{
+    "instruction": "Locate media_console-0 and approach coffee_table-0 in your vicinity",
+    "goal": "media_console-0, coffee_table-0",
+    "scene_path": "/data1/lfwj/gen_scene/final_all_usd/5/145/145.usd"
+}

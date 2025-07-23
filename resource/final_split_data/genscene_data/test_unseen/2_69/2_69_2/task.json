@@ -1,0 +1,5 @@
+{
+    "instruction": "Go to desk-0 and navigate towards bookshelf-0",
+    "goal": "desk-0, bookshelf-0",
+    "scene_path": "/data1/lfwj/gen_scene/final_all_usd/2/69/69.usd"
+}

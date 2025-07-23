@@ -1,0 +1,5 @@
+{
+    "instruction": "Find floor_lamp-0 and proceed to floor_lamp-1",
+    "goal": "floor_lamp-0, floor_lamp-1",
+    "scene_path": "/data1/lfwj/gen_scene/final_all_usd/4/110/110.usd"
+}

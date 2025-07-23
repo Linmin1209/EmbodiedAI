@@ -1,0 +1,5 @@
+{
+    "instruction": "Locate bed-0 and get close to nightstand-0 nearby",
+    "goal": "bed-0, nightstand-0",
+    "scene_path": "/data1/lfwj/gen_scene/final_all_usd/5/22/22.usd"
+}

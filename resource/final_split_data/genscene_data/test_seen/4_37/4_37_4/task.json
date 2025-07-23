@@ -1,0 +1,5 @@
+{
+    "instruction": "Locate wardrobe-0 and head towards chair-0",
+    "goal": "wardrobe-0, chair-0",
+    "scene_path": "/data1/lfwj/gen_scene/final_all_usd/4/37/37.usd"
+}

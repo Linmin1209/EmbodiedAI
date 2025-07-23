@@ -1,0 +1,5 @@
+{
+    "instruction": "Locate alarm_clock-0 and get close to bed-0",
+    "goal": "alarm_clock-0, bed-0",
+    "scene_path": "/data1/lfwj/gen_scene/final_all_usd/4/36/36.usd"
+}

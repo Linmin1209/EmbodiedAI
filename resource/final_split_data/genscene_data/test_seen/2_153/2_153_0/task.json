@@ -1,0 +1,5 @@
+{
+    "instruction": "Find bed-0 and approach wardrobe-0 nearby",
+    "goal": "bed-0, wardrobe-0",
+    "scene_path": "/data1/lfwj/gen_scene/final_all_usd/2/153/153.usd"
+}

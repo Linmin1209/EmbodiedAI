@@ -1,0 +1,5 @@
+{
+    "instruction": "Locate bathtub-0 and navigate to toilet-0 nearby",
+    "goal": "bathtub-0, toilet-0",
+    "scene_path": "/data1/lfwj/gen_scene/final_all_usd/2/14/14.usd"
+}

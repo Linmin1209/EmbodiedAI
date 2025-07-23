@@ -1,0 +1,5 @@
+{
+    "instruction": "Locate bed-0 and find queen_bed-0",
+    "goal": "bed-0, queen_bed-0",
+    "scene_path": "/data1/lfwj/gen_scene/final_all_usd/4/97/97.usd"
+}

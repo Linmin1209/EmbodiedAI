@@ -1,0 +1,5 @@
+{
+    "instruction": "Locate bedside_table_left-0 and walk toward bookshelf-0",
+    "goal": "bedside_table_left-0, bookshelf-0",
+    "scene_path": "/data1/lfwj/gen_scene/final_all_usd/2/164/164.usd"
+}

@@ -1,0 +1,5 @@
+{
+    "instruction": "Head to small_table-0 and then go towards sectional_sofa-0",
+    "goal": "small_table-0, sectional_sofa-0",
+    "scene_path": "/data1/lfwj/gen_scene/final_all_usd/3/81/81.usd"
+}
