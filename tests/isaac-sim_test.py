@@ -1,14 +1,15 @@
 import os
 os.environ["OMNI_KIT_ACCEPT_EULA"] = "YES"
+from pathlib import Path
 
 
 import isaacsim
 from omni.isaac.kit import SimulationApp
 
 config = {
-     "width": "1280",
-     "height": "720",
-     "headless": False,
+     "width": "640",
+     "height": "360",
+     "headless": True,
 }
 simulation_app = SimulationApp(config)
 
@@ -48,14 +49,14 @@ my_jetbot = WheeledRobot(
     )
 my_jetbot = my_world.scene.add(my_jetbot)
 
-camera = Camera("/World/Jetbot/chassis/rgb_camera/jetbot_camera",resolution=(1280,640))
+camera = Camera("/World/Jetbot/chassis/rgb_camera/jetbot_camera", resolution=(640, 360))
 
 
 
 vision_camera = Camera("/World/vison_camera",
                     position = np.array([0.0, 0.0, 0.0]),
-                    resolution=(1280,640),
-                    frequency=20,
+                    resolution=(640, 360),
+                    frequency=10,
                     orientation = np.array([0, 0, 0,1]))
 
 light_1 = prim_utils.create_prim(
@@ -71,10 +72,22 @@ light_1 = prim_utils.create_prim(
     }
 )
 my_world.scene.add_default_ground_plane()
+scene_usd_path = Path(
+    os.environ.get(
+        "SCENE_USD_PATH",
+        "/data1/linmin/reconstruct_scene/play_room_pgsr.usd",
+    )
+).expanduser().resolve()
+if not scene_usd_path.exists():
+    raise FileNotFoundError(
+        f"Scene USD not found: {scene_usd_path}. "
+        "Set env SCENE_USD_PATH to a valid .usd file."
+    )
+
 construct_scene=prim_utils.create_prim(
     prim_type="Xform",
     prim_path = "/World/Scene",
-    usd_path="D:\MMLM_Robot\Grasp_Nav\code//reconstruct_scene\play_room_pgsr.usd",
+    usd_path=scene_usd_path.as_uri(),
     # translation=np.array([0.0, 0.0, -0.01]),
     # usd_path="D:\MMLM_Robot\Grasp_Nav\code//reconstruct_scene\drjohn.usd",
 )
@@ -120,9 +133,10 @@ while simulation_app.is_running():
 
         pos_list.append(position.tolist())
     
-        if camera.get_rgb().any():
-            print(type(camera.get_rgb()))
-            print(camera.get_rgb().shape)
+        rgb = camera.get_rgb()
+        if rgb is not None and rgb.any():
+            print(type(rgb))
+            print(rgb.shape)
             dis =camera.get_current_frame()["distance_to_camera"]
             where_are_inf = np.isinf(dis)
             dis[where_are_inf] = 5

@@ -123,8 +123,8 @@ class NavigateTask(BaseTask):
         for i in range(len(self.robots)):
             self.init_pos.append(self.robots[i].get_world_pose())
             if isinstance(self.goal_points[0][1], list):
-                goal_point_0 = self.goal_points[id][0][0]
-                goal_point_1 = self.goal_points[id][1][0]
+                goal_point_0 = self.goal_points[i][0][0]
+                goal_point_1 = self.goal_points[i][1][0]
             else:
                 goal_point_0 = self.goal_points[0][0]
                 goal_point_1 = self.goal_points[1][0]

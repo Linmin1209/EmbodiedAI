@@ -1,5 +1,7 @@
 import torch
 import torch.nn as nn
+from pathlib import Path
+
 from simulator.core.agent import BaseAgent
 from gym import spaces
 import os
@@ -7,8 +9,19 @@ import sys
 import re
 from PIL import Image
 import torchvision.transforms as transforms
-# Add the imitation learning project path to system path
-sys.path.append('./imitation_learning_project')
+
+# 与仓库根目录解耦：勿用 ./imitation_learning_project（依赖当前工作目录）
+_IL_ROOT = Path(__file__).resolve().parents[2] / "imitation_learning_project"
+if _IL_ROOT.is_dir():
+    _ilp = str(_IL_ROOT)
+    if _ilp not in sys.path:
+        sys.path.insert(0, _ilp)
+else:
+    raise ImportError(
+        f"未找到 {_IL_ROOT}，BCAgent 需要 imitation_learning_project。"
+        "请从 EmbodiedAI 仓库根运行或设置 PYTHONPATH。"
+    )
+
 from transformers import AutoTokenizer
 from models.bc_transformer import BCTransformer
 from configs.model_config import ModelConfig

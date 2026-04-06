@@ -16,7 +16,8 @@ class BaseEnv:
             self.configs = configs.config
         self.sim  = Simulator(self.configs.sim)
         self.task_config = self.configs.task
-        self.is_running = self.sim.is_running
+        # 勿写成 self.is_running = self.sim.is_running：会把「当时」的 bool 冻在实例上，
+        # while env.is_running 永远不会反映 simulation_app 的真实状态，可能导致 0 步即退出。
         self.offset = self.configs.offset
         self.scene_num = self.configs.env_num
         self.scene_id = list(range(self.scene_num))
@@ -34,7 +35,6 @@ class BaseEnv:
         self.sim.reinit_world()
         self.task_config = self.configs.task
         # self.sim.play()
-        self.is_running = self.sim.is_running
         self.offset = self.configs.offset
         self.scene_num = self.configs.env_num
         self.scene_id = list(range(self.scene_num))
@@ -51,6 +51,12 @@ class BaseEnv:
         
     def load_scene(self, scene_id):
         scene_class = registry.get_scene(self.configs.scene.type)
+        if scene_class is None:
+            raise TypeError(
+                f"Scene type {self.configs.scene.type!r} is not registered in registry. "
+                "Import the scene implementation before creating BaseEnv, e.g. "
+                "`from simulator.scenes import Interactive_Scene`."
+            )
         self.scenes.append(scene_class(self.configs.scene))
         self.sim.import_scene(self.scenes[scene_id], self.scene_id2offset[scene_id], scene_id)
         # register.get(self.configs)
@@ -164,7 +170,12 @@ class BaseEnv:
             done_list.append(results[2])
         # Run final post-processing
         return obs_list, reward_list, done_list, info_list
-    
+
+    @property
+    def is_running(self) -> bool:
+        """每次读取时查询 SimulationApp，避免被初始化时的布尔值「冻住」。"""
+        return bool(self.sim.is_running)
+
     def find_object_around(self, position, scene_id=0):
         return self.sim.find_object_around(self.scenes[scene_id], position)
 

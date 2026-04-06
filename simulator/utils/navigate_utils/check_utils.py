@@ -16,8 +16,8 @@ def check_reachability_with_expansion(hm, navigator , obj_world_pos, robot_world
     hm_map = hm.get_map()
     rows, cols = len(hm_map), len(hm_map[0])
 
-    # 坐标转换
-    navigator.planner.compute_cost_map()
+    # 坐标转换：real2map(..., reachable_assurance=False) 仅用 scale/x_min/y_min，不读 cost_map。
+    # 勿每步 compute_cost_map()（O(地图×障碍环)，极慢）；静态栅格在 get_navigator 里已算过一次即可。
     obj_map = navigator.planner.real2map(obj_world_pos, reachable_assurance=False)
     rob_map = navigator.planner.real2map(robot_world_pos, reachable_assurance=False)
     x0, y0 = obj_map

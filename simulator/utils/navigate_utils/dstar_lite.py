@@ -62,49 +62,69 @@ class Node:
 
 
 class PriorityQueue:
-    '''
-    Optimized priority queue
-    '''
-    def __init__(self):
-        self.queue = []  # Node queue
-        self.nodes = []  # Node position list
+    """
+    D* Lite 用惰性删除优先队列。
 
-    def is_empty(self):
-        # Check if queue is empty
-        return len(self.queue) == 0
+    旧实现每次 remove 对整堆 O(n) 过滤再 heapify，在大地图（百万格级）上会导致单次规划数十分钟。
+    此处采用「世代号」失效旧条目 + heapq，insert/remove/update 均摊接近 O(log n)。
+    """
+
+    __slots__ = ("heap", "_seq", "_generation", "nodes")
+
+    def __init__(self):
+        self.heap = []  # (k1, k2, seq, pos, gen)
+        self._seq = 0
+        self._generation: dict = {}  # pos -> int，remove 时 +1 使旧堆条目失效
+        self.nodes = set()  # 逻辑上在队列中的 pos（与 D* contain 语义一致）
+
+    def _clean_top(self) -> None:
+        while self.heap:
+            k1, k2, seq, pos, gen = self.heap[0]
+            if gen == self._generation.get(pos, 0):
+                return
+            heapq.heappop(self.heap)
+
+    def is_empty(self) -> bool:
+        self._clean_top()
+        return len(self.heap) == 0
 
     def top(self):
-        return self.queue[0].pos
+        self._clean_top()
+        if not self.heap:
+            return None
+        return self.heap[0][3]
 
     def top_key(self):
-        if self.is_empty():
-            return Priority(float('inf'), float('inf'))
-        return self.queue[0].priority
+        self._clean_top()
+        if not self.heap:
+            return Priority(float("inf"), float("inf"))
+        k1, k2, _, _, _ = self.heap[0]
+        return Priority(k1, k2)
 
     def pop(self):
-        # Remove the first node
-        node = heapq.heappop(self.queue)
-        self.nodes.remove(node.pos)
-        return node
+        while self.heap:
+            k1, k2, seq, pos, gen = heapq.heappop(self.heap)
+            if gen != self._generation.get(pos, 0):
+                continue
+            self.nodes.discard(pos)
+            return Node(pos, Priority(k1, k2))
+        return None
 
-    def insert(self, pos, priority):
-        # Create and add node
-        node = Node(pos, priority)
-        heapq.heappush(self.queue, node)
-        self.nodes.append(pos)
+    def insert(self, pos, priority: Priority):
+        gen = self._generation.get(pos, 0)
+        self._seq += 1
+        heapq.heappush(
+            self.heap, (priority.k1, priority.k2, self._seq, pos, gen)
+        )
+        self.nodes.add(pos)
 
     def remove(self, pos):
-        # Remove specified node and reorder
-        self.queue = [n for n in self.queue if n.pos != pos]
-        heapq.heapify(self.queue)  # Reorder
-        self.nodes.remove(pos)
+        self._generation[pos] = self._generation.get(pos, 0) + 1
+        self.nodes.discard(pos)
 
-    def update(self, pos, priority):
-        # Update priority value of specified position
-        for n in self.queue:
-            if n.pos == pos:
-                n.priority = priority
-                break
+    def update(self, pos, priority: Priority):
+        self.remove(pos)
+        self.insert(pos, priority)
 
 
 class DStarLite:
@@ -115,7 +135,8 @@ class DStarLite:
                  resolution=0.06,
                  react_radius=200, # Reaction radius
                  vision_radius=math.pi / 3,  # Vision radius
-                 max_path_length=2000  # Maximum path length
+                 max_path_length=2000,  # Maximum path length
+                 max_compute_shortest_path_iterations=None,
                  ):
 
         self.map = map
@@ -128,6 +149,19 @@ class DStarLite:
         self.react_radius = math.floor(react_radius / scale_ratio)
         self.vision_radius = vision_radius
         self.max_path_length = max_path_length
+        # 防止超大栅格上一次规划卡死；None 表示按地图规模自动给上限
+        if max_compute_shortest_path_iterations is None:
+            env_cap = os.environ.get("EMBODIEDAI_DSTAR_MAX_ITERATIONS")
+            if env_cap is not None:
+                self.max_compute_shortest_path_iterations = max(1, int(env_cap))
+            else:
+                n_cells = int(self.X) * int(self.Y)
+                self.max_compute_shortest_path_iterations = max(
+                    500_000, min(5_000_000, n_cells * 8)
+                )
+        else:
+            self.max_compute_shortest_path_iterations = int(max_compute_shortest_path_iterations)
+        self._last_compute_truncated = False
 
         self.dyna_obs_list = []  # Dynamic obstacle position list [(x, y)]
         self.dyna_obs_occupy = []  # Dynamic obstacle occupied position list
@@ -178,6 +212,7 @@ class DStarLite:
         self.k_m = 0
         self.rhs = np.ones((self.X, self.Y)) * np.inf
         self.g = self.rhs.copy()
+        self._last_compute_truncated = False
 
 
     def calculate_key(self, s: (int, int)):
@@ -237,9 +272,29 @@ class DStarLite:
         '''
 
         c_map = self.map.copy()
+        self._last_compute_truncated = False
+        iterations = 0
+        max_iter = self.max_compute_shortest_path_iterations
 
         while self.U.top_key() < self.calculate_key(self.s_start) or self.rhs[self.s_start] > self.g[self.s_start]:
+            iterations += 1
+            if iterations > max_iter:
+                self._last_compute_truncated = True
+                import warnings
+
+                warnings.warn(
+                    f"D* Lite compute_shortest_path 已达迭代上限 {max_iter}（地图约 {self.X}x{self.Y}），"
+                    "提前结束；路径可能非最优。可调大 max_compute_shortest_path_iterations 或缩小栅格地图。",
+                    RuntimeWarning,
+                    stacklevel=2,
+                )
+                break
+
             u = self.U.top()
+            if u is None:
+                self._last_compute_truncated = True
+                break
+
             c_map[u] = 10
             k_old = self.U.top_key()
             k_new = self.calculate_key(u)
@@ -306,7 +361,16 @@ class DStarLite:
 
         self._planning(s_start, s_goal, debug)
 
-       # Map coordinates -> Actual coordinates
+        # 收敛失败或栅格无路时，用起点-终点直线（栅格端点）回退，避免 optimal_length 为 0 或后续崩溃
+        if (
+            len(self.path) < 2
+            and self.s_start is not None
+            and self.s_goal is not None
+            and tuple(self.s_start) != tuple(self.s_goal)
+        ):
+            self.path = [tuple(self.s_start), tuple(self.s_goal)]
+
+        # Map coordinates -> Actual coordinates
         path = [self.map2real(node) for node in self.path]
         return path
 
@@ -325,6 +389,8 @@ class DStarLite:
         cur = self.s_start
         for i in range(self.max_path_length):
             succ = [s_ for s_ in self.get_neighbors(cur)]
+            if not succ:
+                break
             cur = succ[np.argmin([self.c(cur, s_) + self.g[s_] + 20 * (s_ in path) for s_ in succ])]  # Avoid jitter (there will be a penalty for walking on repeated points)
             path.append(cur)
             if cur == self.s_goal:
@@ -454,7 +520,8 @@ class DStarLite:
         if self.cost_map[x, y] != 0:
             start_x, end_x = max(x - 1, 0), min(x + 1, self.X - 1)
             start_y, end_y = max(y - 1, 0), min(y + 1, self.Y - 1)
-            while True:
+            max_ring = max(self.X, self.Y) + 2
+            for _ring in range(max_ring):
                 for x_ in range(start_x, end_x + 1):
                     if self.cost_map[x_, start_y] == 0:
                         return tuple((x_, start_y))
@@ -469,6 +536,9 @@ class DStarLite:
                         return tuple((start_x, y_))
                 start_x, end_x = max(start_x - 1, 0), min(end_x + 1, self.X - 1)
                 start_y, end_y = max(start_y - 1, 0), min(end_y + 1, self.Y - 1)
+                if start_x <= 0 and end_x >= self.X - 1 and start_y <= 0 and end_y >= self.Y - 1:
+                    break
+            return tuple((x, y))
         return tuple((x, y))
 
     def draw_graph(self, step_num, yaw):
