@@ -75,3 +75,8 @@ target/
 *.~undo-tree
 *.~undo-tree~
 *~
+
+# Large local data & checkpoints (do not push)
+train_data/
+imitation_learning_project/checkpoints/
+imitation_learning_project/checkpoints_ddp/

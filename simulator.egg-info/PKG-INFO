@@ -1,4 +1,4 @@
-Metadata-Version: 2.1
+Metadata-Version: 2.4
 Name: simulator
 Version: 0.0.1
 Summary: EmbodiedAI Simulator
@@ -8,5 +8,15 @@ Author-email:
 Classifier: Programming Language ::Python :: 3
 Requires-Python: >=3.10
 Description-Content-Type: text/markdown
+Dynamic: author
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: requires-python
+Dynamic: summary
 
 # EmbodiedAI
+## 1.IsaacSim 
+[Environmental configuration](https://github.com/pzhren/EmbodiedAI/blob/main/IsaacSim.md)
+## 2.API
+- [Simulator API](https://github.com/pzhren/EmbodiedAI/tree/main/api.md)

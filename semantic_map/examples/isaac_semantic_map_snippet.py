@@ -3,8 +3,8 @@
 示例片段：在 Isaac Sim 主循环中调用语义地图（需已配置 NPC 与 GPU 依赖）。
 
 运行前（在 EmbodiedAI 仓库根目录）:
-    export PYTHONPATH=/data1/linmin/EmbodiedAI:$PYTHONPATH
-    export NPC_REPO_ROOT=/data1/linmin/NPC
+    export PYTHONPATH=/data2/linmin/EmbodiedAI:$PYTHONPATH
+    export NPC_REPO_ROOT=/data2/linmin/NPC
 
 本文件不直接启动 SimulationApp，仅展示与 NPC test_scene_construct 对齐的调用顺序。
 """

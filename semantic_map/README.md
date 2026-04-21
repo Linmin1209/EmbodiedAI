@@ -11,6 +11,9 @@
 
 本包**不复制**上述大型依赖，仅通过 `sys.path` **桥接** NPC。请先克隆/配置好 NPC，并安装其文档要求的 Python 包与模型权重。
 
+**离线权重一键下载**（BERT + GroundingDINO SwinB + SAM2.1 large，与 `grounded_sam_perception.py` 路径一致）：在可联网环境执行  
+`python /path/to/NPC/scripts/download_semantic_map_models.py`；后台执行：`bash /path/to/NPC/scripts/download_hf_models_background.sh`。可选 `--sam2-all` 拉取全部 SAM2.1 变体。
+
 ### Isaac Sim + GroundingDINO：为何必须子进程分割（根因）
 
 Isaac 使用 **`omni.isaac.ml_archive` 自带的 PyTorch**。在该进程里再跑 GroundingDINO/SAM2 时，CUDA 上下文常与 Omniverse 栈**不兼容**，表现为：
@@ -33,7 +36,8 @@ Isaac 使用 **`omni.isaac.ml_archive` 自带的 PyTorch**。在该进程里再�
 
 | 变量 | 含义 |
 |------|------|
-| `NPC_REPO_ROOT` 或 `EMBODIEDAI_NPC_ROOT` | NPC 仓库根目录，默认 `/data1/linmin/NPC` |
+| `NPC_REPO_ROOT` 或 `EMBODIEDAI_NPC_ROOT` | NPC 仓库根目录，默认 `/data2/linmin/NPC` |
+| `NPC_GROUNDED_SAM_MODEL_ROOT` | GroundingDINO / SAM2 权重根目录，默认 `/data2/linmin/model`（见 NPC `grounded_sam_perception.py`） |
 | `SEM_GPU_ID` / `MAP_GPU_ID` | 分割模型与地图模块使用的 GPU |
 | `SEM_MAP_DUMP` | 可视化等输出根目录 |
 | `SEM_MAP_EXP_NAME` | 实验名子目录 |
@@ -46,8 +50,8 @@ Isaac 使用 **`omni.isaac.ml_archive` 自带的 PyTorch**。在该进程里再�
 与 `tests/test_scene/test_agent.py` 相同方式加载 `DatasetLoader` + `BaseEnv` + `ReferencePathAgent`，用前视相机 **RGB + depth** 与 **位姿** 驱动 NPC `SemanticMap`（若初始化失败则仅保存传感器帧）。
 
 ```bash
-export PYTHONPATH=/data1/linmin/EmbodiedAI:$PYTHONPATH
-export NPC_REPO_ROOT=/data1/linmin/NPC
+export PYTHONPATH=/data2/linmin/EmbodiedAI:$PYTHONPATH
+export NPC_REPO_ROOT=/data2/linmin/NPC
 
 python semantic_map/examples/run_reference_path_semantic_map.py 0 \
   --output-dir ./semantic_map/outputs/task_0 --headless
@@ -63,9 +67,11 @@ python semantic_map/examples/run_reference_path_semantic_map.py 0 \
 
 **注意**：当前任务里机器人相机需在配置中启用 `depth`（与 `tests/test_configs/test.yaml` 中 `modals: ["rgb","depth"]` 一致），否则脚本会报错提示。
 
-**分辨率**：NPC `Categorical2DSemanticMapModule` 的 `env_frame_height/width` 必须与 **`--camera-key` 对应传感器的 `SensorConfig.resolution`（宽×高）** 一致；`run_reference_path_semantic_map.py` 会从 `BaseEnv` 自动读取。若手写 `default_semantic_map_args` 时仍用 640×480 而相机实为 1280×720，会在 `AvgPool2d` 后出现 `19200` vs `57600` 的 `RuntimeError`。
+**分辨率**：NPC `Categorical2DSemanticMapModule` 的 `env_frame_height/width` 必须与 **`--camera-key` 对应传感器的 `SensorConfig.resolution`（宽×高）** 一致。`DatasetLoader` / `simulator/core/dataset.py` 中前视相机已与 NPC `stretch.py` 设为 **640×480**；`run_reference_path_semantic_map.py` 从 `BaseEnv` 读取该分辨率写入 `env_frame_*`。若你在其它任务里自定义分辨率，须与 `default_semantic_map_args` 的 `env_frame_*` 一致，否则可能在 `AvgPool2d` 等步骤出现维度不匹配。
 
-**水平视场 hfov**：NPC 用 `hfov`（度）做深度→栅格投影。EmbodiedAI `SensorConfig.fov` 默认常为 **90°**，而 NPC `arguments.py` 默认 **60°**；若只对齐分辨率、不对齐视场，地图几何会偏。`run_reference_path_semantic_map.py` 会**默认从该相机的 `fov` 读入**（也可用 `--semantic-hfov` 覆盖）。安装高度与 NPC 默认不符时可用 **`--semantic-camera-height`**（米）。
+**水平视场 hfov**：NPC 用 `hfov`（度）做深度→栅格投影。上述 Dataset 中 `SensorConfig.fov` 已与 NPC **`arguments.py`/co_test 的 60°** 对齐；脚本默认使用该相机的 `fov`，也可用 **`--semantic-hfov`** 覆盖。相机高度默认 **1.32 m**（与 NPC），可用 **`--semantic-camera-height`** 或环境变量 **`SEM_MAP_CAMERA_HEIGHT`**。
+
+**位姿 / 重影**：`SemanticMap` 用相邻帧 `gps + compass` 的相对位姿 `pose_delta` 滚动地图。若首帧仍用「上一时刻 = 全零」与当前绝对坐标算增量，会把起始位置误当成一步特大位移，全局图错位并出现**同一障碍物拖影、两层语义**。NPC `mapping.py` 已对**每个 env 首帧**将 `pose_delta` 置零，仅融合观测；之后仍用真实帧间增量。
 
 ---
 

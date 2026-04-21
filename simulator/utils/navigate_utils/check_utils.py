@@ -23,6 +23,13 @@ def check_reachability_with_expansion(hm, navigator , obj_world_pos, robot_world
     x0, y0 = obj_map
     xR, yR = rob_map
 
+    def _in_bounds(ix: int, iy: int) -> bool:
+        return 0 <= ix < rows and 0 <= iy < cols
+
+    # 机器人/目标投影在地图网格外（走出场景或数值越界）时勿直接索引，否则 IndexError
+    if not (_in_bounds(int(x0), int(y0)) and _in_bounds(int(xR), int(yR))):
+        return False
+
     # Step 1：确保物品在黑色区域，机器人在白色区域
     if hm_map[x0][y0] != 1:
         print("物品不在黑色区域 → 无效地图")

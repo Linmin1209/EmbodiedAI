@@ -18,7 +18,7 @@ def default_semantic_map_args(
     **overrides: Any,
 ) -> Namespace:
     """
-    默认与 `/data1/linmin/NPC/arguments.py` 中训练/建图相关项对齐，
+    默认与 NPC `arguments.py` 中训练/建图相关项对齐（本机默认路径见 `npc_paths.resolve_npc_repo_root`），
     可通过关键字或环境变量覆盖。
 
     环境变量示例：

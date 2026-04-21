@@ -47,11 +47,12 @@ class ControllerConfig(BaseConfig):
 class SensorConfig(BaseConfig):
     type: str
     modals: Optional[List[str]] = []
-    resolution: Optional[Tuple[int,int]] = (1280, 720)
+    # 与 NPC Co-scene-construct stretch 前视相机默认一致（DatasetLoader 会显式写入）
+    resolution: Optional[Tuple[int, int]] = (640, 480)
     position: Optional[List] = [.0, .0, .0]
     orientation: Optional[List] = [.0, .0, .0, 1.0]
-    fov: Optional[float] = 90
-    frequency: Optional[int] = 20
+    fov: Optional[float] = 60
+    frequency: Optional[int] = 15
     prim_path: Optional[str] = None
     on_robot: Optional[bool] = False
 

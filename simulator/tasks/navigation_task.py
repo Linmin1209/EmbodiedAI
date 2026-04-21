@@ -12,11 +12,26 @@ from transformations import euler_from_quaternion,quaternion_from_euler
 import json
 from simulator.utils.navigate_utils.navigate import *
 from simulator.utils.navigate_utils.check_utils import check_reachability_with_expansion
+import math
+import numpy as np
+
 lazyimport(globals(), """
     from omni.isaac.core.prims import XFormPrim
     from omni.isaac.core.robots import Robot
   """
 )
+
+
+def _nav_xy(pos):
+    """World position -> [x, y] for 2D Navigator (path points are 2D)."""
+    if pos is None:
+        return None
+    a = np.asarray(pos, dtype=np.float64).reshape(-1)
+    if a.size < 2:
+        raise ValueError(f"Need at least 2 coordinates, got {pos!r}")
+    return [float(a[0]), float(a[1])]
+
+
 @registry.register_task
 class NavigateTask(BaseTask):
     def __init__(self, config:TaskConfig):
@@ -261,7 +276,11 @@ class NavigateTask(BaseTask):
             robot_pos = [self.start_points[robot_id][0], self.start_points[robot_id][1]]
         else:
             robot_pos = start_pos
-        
+
+        # goal_point_* from config may be 3D world [x,y,z]; navigator path is 2D — align dims.
+        robot_pos = _nav_xy(robot_pos)
+        goal_pos = _nav_xy(goal_pos)
+
         path, map_nav_path = self.navigator.navigate(goal_pos, robot_pos)
         # map_goal_pos = self.navigator.planner.real2map(goal_pos)
         # show_map_(self.navigator.planner.cost_map, map_nav_path, map_goal_pos)

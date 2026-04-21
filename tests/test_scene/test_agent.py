@@ -1,4 +1,7 @@
 import os
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 from simulator.core.config import EnvConfig, AgentConfig
 from simulator.core.env import BaseEnv
 from simulator.core.dataset import DatasetLoader
@@ -8,27 +11,27 @@ from simulator.agents import BCAgent, ReferencePathAgent, RecBertAgent
 import logging
 import sys
 
-loader = DatasetLoader(root_dir="/data1/linmin/EmbodiedAI/resource/datasets/all_task",
-scene_path="/data1/linmin/NPC/hssd_test_scene",
-robot_path="/data1/linmin/EmbodiedAI/resource/robots/stretch/stretch_pos.usd",
+loader = DatasetLoader(root_dir="/data2/linmin/EmbodiedAI/resource/datasets/all_task",
+scene_path="/data2/linmin/NPC/hssd_scene_new",
+robot_path="/data2/linmin/EmbodiedAI/resource/robots/stretch/stretch_pos.usd",
 headless = True)
 print("total len:",len(loader))
-# id= 30
-id = int(sys.argv[1])
+id= 30
+# id = int(sys.argv[1])
 cfg = loader[id]
-log_dir = "/data1/linmin/EmbodiedAI/eval_data_logs"
+log_dir = "/data2/linmin/EmbodiedAI/eval_data_logs"
 os.makedirs(log_dir, exist_ok=True)
 log_file_name = f"log_{id}.log"
 log_file_path = os.path.join(log_dir, log_file_name)
-if os.path.exists(log_file_path):
-    sys.exit()
+# if os.path.exists(log_file_path):
+#     sys.exit()
 
 env = BaseEnv(cfg)
 
 agent = ReferencePathAgent(cfg)
 # # Create config with checkpoint path
 # config = AgentConfig(name="bc_agent", type="bc_agent", checkpoint_path="")
-# config.checkpoint_path = "/data1/linmin/EmbodiedAI/app/checkpoints_bert3/checkpoint_epoch_10.pt"  # Update this path
+# config.checkpoint_path = "/data2/linmin/EmbodiedAI/app/checkpoints_bert3/checkpoint_epoch_10.pt"  # Update this path
 
 # Create agent
 # agent = BCAgent(config)
@@ -74,7 +77,7 @@ while env.is_running and not done:
         done = done[0]
     
    #  from PIL import Image
-   #  Image.fromarray(rgb1).save(f"/data1/linmin/EmbodiedAI/tests/obs/rgb1_{i}.png")
-   #  Image.fromarray(rgb2).save(f"/data1/linmin/EmbodiedAI/tests/obs/rgb2_{i}.png")
-   #  Image.fromarray(rgb3).save(f"/data1/linmin/EmbodiedAI/tests/obs/rgb3_{i}.png")
+   #  Image.fromarray(rgb1).save(f"/data2/linmin/EmbodiedAI/tests/obs/rgb1_{i}.png")
+   #  Image.fromarray(rgb2).save(f"/data2/linmin/EmbodiedAI/tests/obs/rgb2_{i}.png")
+   #  Image.fromarray(rgb3).save(f"/data2/linmin/EmbodiedAI/tests/obs/rgb3_{i}.png")
 env.close()

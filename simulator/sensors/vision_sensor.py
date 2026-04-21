@@ -44,12 +44,12 @@ class VisionSensor(BaseSensor):
         )
         self.camera.initialize()
         self.camera.add_motion_vectors_to_frame()
+        # 与 NPC Co-scene-construct stretch.camera_init 一致
+        self.camera.set_clipping_range(near_distance=0.1, far_distance=10.0)
         # self.camera.add_distance_to_camera_to_frame()
         self.camera.add_distance_to_image_plane_to_frame()
-        # self.camera.set_focal_length(1.0)
         self.camera.set_focal_length(31.17691)
         self.camera.set_horizontal_aperture(36.0)
-        pass
     
     def get_world_pose(self) -> np.ndarray:
         """
